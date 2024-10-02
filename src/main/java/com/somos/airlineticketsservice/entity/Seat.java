@@ -19,23 +19,23 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String seatNumber;  // e.g., "1A", "1B"
+    private String seatNumber;
 
     @Enumerated(EnumType.STRING)
-    private SeatStatus status;  // AVAILABLE, HELD, BOOKED, etc.
+    private SeatStatus status;
 
     @ManyToOne
     @JoinColumn(name = "level_id", nullable = false)
-    private Level level;  // links to Level entity
+    private Level level;
 
     @ManyToOne
     @JoinColumn(name = "price_tier_id", nullable = false)
-    private PriceTier priceTier;  // links to PriceTier entity
+    private PriceTier priceTier;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")  // Add a foreign key reference to Customer
-    private Customer customer;  // Reference to the customer who holds the seat
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @Column(name = "hold_time", nullable = true)
-    private LocalDateTime holdTime;  // Time when the seat was held
+    private LocalDateTime holdTime;
 }

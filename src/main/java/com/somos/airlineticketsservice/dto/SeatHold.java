@@ -12,5 +12,5 @@ public class SeatHold {
     private String seatNumber;
     private Double price;
     private String customerEmail;
-    private LocalDateTime holdTime; // New field to track hold time
+    private LocalDateTime holdTime;
 }

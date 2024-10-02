@@ -36,7 +36,7 @@ public class ReservationController {
             @RequestParam String customerEmail,
             @RequestParam int minPrice,
             @RequestParam int maxPrice,
-            @RequestParam(required = false) String[] levelNames // Optional parameter
+            @RequestParam(required = false) String[] levelNames
     ) {
         return reservationService.reserveSeats(numSeats, customerEmail, minPrice, maxPrice, Optional.ofNullable(levelNames));
     }

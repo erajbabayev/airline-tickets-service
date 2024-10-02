@@ -44,7 +44,7 @@ class SeatServiceTest {
         // Arrange
         Seat seat = new Seat();
         seat.setStatus(SeatStatus.HELD);
-        seat.setHoldTime(LocalDateTime.now().minusMinutes(3)); // Expired hold
+        seat.setHoldTime(LocalDateTime.now().minusMinutes(3));
 
         List<Seat> heldSeats = List.of(seat);
 

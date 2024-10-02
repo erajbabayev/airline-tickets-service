@@ -19,15 +19,15 @@ public class Level {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String levelName;  // e.g., "First Class", "Business"
+    private String levelName;
 
-    private int rows;  // number of rows in the level
+    private int rows;
 
-    private int seatsInRow;  // seats per row
+    private int seatsInRow;
 
     @OneToMany(mappedBy = "level", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<PriceTier> priceTiers;  // pricing tiers within the level
+    private List<PriceTier> priceTiers;
 
     @OneToMany(mappedBy = "level", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Seat> seats;  // seats within the level
+    private List<Seat> seats;
 }

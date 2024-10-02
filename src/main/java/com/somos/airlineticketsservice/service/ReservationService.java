@@ -34,12 +34,10 @@ public class ReservationService {
         Customer customer = customerRepository.findByEmail(customerEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
 
-        // Convert String[] to List<Long>
         List<Long> holdIds = Arrays.stream(seatHoldIds)
                 .map(Long::valueOf)
                 .collect(Collectors.toList());
 
-        // Find the held seats based on the holdIds
         List<Seat> seatsToReserve = seatRepository.findAllById(holdIds)
                 .stream()
                 .filter(seat -> seat.getStatus() == SeatStatus.HELD && seat.getCustomer().equals(customer))
@@ -49,7 +47,6 @@ public class ReservationService {
             throw new IllegalArgumentException("Some seats are no longer held or not available");
         }
 
-        // Create a reservation and save it
         String reservationCode = UUID.randomUUID().toString();
         Reservation reservation = new Reservation();
         reservation.setCustomer(customer);
@@ -57,20 +54,17 @@ public class ReservationService {
         reservation.setReservationCode(reservationCode);
         reservation.setReservationTime(LocalDateTime.now());
 
-        // Update seat status to BOOKED
         seatsToReserve.forEach(seat -> seat.setStatus(SeatStatus.RESERVED));
 
         seatRepository.saveAll(seatsToReserve);
         reservationRepository.save(reservation);
 
-        // Build detailed response
         Map<String, Object> response = new HashMap<>();
         response.put("reservationCode", reservationCode);
         response.put("customerEmail", customerEmail);
         response.put("numSeats", seatsToReserve.size());
         response.put("reservationTime", reservation.getReservationTime());
 
-        // Add seat details
         List<Map<String, Object>> seatDetails = seatsToReserve.stream().map(seat -> {
             Map<String, Object> seatInfo = new HashMap<>();
             seatInfo.put("seatNumber", seat.getSeatNumber());
@@ -98,7 +92,6 @@ public class ReservationService {
                 throw new LevelNotFoundException(levelNames.get());
             }
         } else {
-            // Pass null to the query when no levels are provided, which will match all levels
             availableSeats = seatRepository.findAvailableSeatsByPriceRangeAndLevels(minPrice, maxPrice, null);
         }
 
@@ -109,25 +102,21 @@ public class ReservationService {
         List<Seat> seatsToReserve = availableSeats.subList(0, numSeats);
         String reservationCode = UUID.randomUUID().toString();
 
-        // Create a new reservation
         Reservation reservation = new Reservation();
         reservation.setCustomer(customer);
         reservation.setSeats(seatsToReserve);
         reservation.setReservationCode(reservationCode);
         reservation.setReservationTime(LocalDateTime.now());
 
-        // Mark seats as reserved
         seatsToReserve.forEach(seat -> seat.setStatus(SeatStatus.RESERVED));
 
         seatRepository.saveAll(seatsToReserve);
         reservationRepository.save(reservation);
 
-        // Build response with reservation details
         Map<String, Object> response = new HashMap<>();
         response.put("reservationCode", reservationCode);
         response.put("numSeats", seatsToReserve.size());
 
-        // Add seat details to the response
         List<Map<String, Object>> seatDetails = seatsToReserve.stream().map(seat -> {
             Map<String, Object> seatInfo = new HashMap<>();
             seatInfo.put("seatNumber", seat.getSeatNumber());
@@ -152,7 +141,6 @@ public class ReservationService {
             reservationDetails.put("customerEmail", reservation.getCustomer().getEmail());
             reservationDetails.put("reservationTime", reservation.getReservationTime());
 
-            // Collect seat details (seat number, price, and level)
             List<Map<String, Object>> seatDetails = reservation.getSeats().stream().map(seat -> {
                 Map<String, Object> seatInfo = new HashMap<>();
                 seatInfo.put("seatNumber", seat.getSeatNumber());

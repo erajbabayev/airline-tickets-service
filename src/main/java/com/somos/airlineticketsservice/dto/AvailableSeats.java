@@ -10,5 +10,5 @@ import java.util.List;
 public class AvailableSeats {
     private String levelName;
     private Long availableSeatsCount;
-    private List<String> priceBreakdown; // List of formatted price and seat details
+    private List<String> priceBreakdown;
 }
